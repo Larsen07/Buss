@@ -121,7 +121,7 @@ body:JSON.stringify({query})
 const data=await r.json()
 const calls=data.data.stopPlace?.estimatedCalls||[]
 
-const filtered=calls.filter(c=>stop.lines.includes(c.serviceJourney.line.publicCode))
+const filtered=calls
 
 const html=filtered.slice(0,6).map(c=>{
 
