@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATB Avganger</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+--bg:#0b1220;
+--panel:#141c28;
+--border:#233043;
+--text:#e6edf3;
+--muted:#94a3b8;
+--accent:#4ade80;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+font-family:'Inter',sans-serif;
+padding:40px;
+}
+
+h1{
+margin-bottom:10px;
+font-size:32px;
+}
+
+.updated{
+color:var(--muted);
+margin-bottom:30px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:20px;
+}
+
+.stop{
+background:var(--panel);
+border:1px solid var(--border);
+border-radius:10px;
+overflow:hidden;
+}
+
+.stop-header{
+padding:14px 18px;
+border-bottom:1px solid var(--border);
+font-weight:600;
+}
+
+.departure{
+display:flex;
+justify-content:space-between;
+padding:12px 18px;
+border-bottom:1px solid var(--border);
+font-family:'Roboto Mono',monospace;
+font-size:15px;
+}
+
+.time{
+color:var(--accent);
+}
+</style>
+</head>
+
+<body>
+
+<h1>ATB Avganger</h1>
+<div class="updated" id="updated">Oppdaterer…</div>
+
+<div class="grid">
+<div class="stop"><div class="stop-header">Studentersamfundet 1</div><div id="s1"></div></div>
+<div class="stop"><div class="stop-header">Studentersamfundet 2</div><div id="s2"></div></div>
+<div class="stop"><div class="stop-header">Studentersamfundet 3</div><div id="s3"></div></div>
+<div class="stop"><div class="stop-header">Olav Kyrres gate</div><div id="s4"></div></div>
+</div>
+
+<script>
+
+const stops=[
+{el:"s1", id:"NSR:StopPlace:43013", lines:["1","2","71","11"]},
+{el:"s2", id:"NSR:StopPlace:43014", lines:["1","2","70","71","12"]},
+{el:"s3", id:"NSR:StopPlace:43015", lines:["3","22","18"]},
+{el:"s4", id:"NSR:StopPlace:42574", lines:["310","340","410"]}
+]
+
+async function load(){
+
+for(const stop of stops){
+
+const query=`
+{
+stopPlace(id:"${stop.id}"){
+estimatedCalls(timeRange:3600,numberOfDepartures:20){
+expectedDepartureTime
+destinationDisplay{frontText}
+serviceJourney{line{publicCode}}
+}
+}
+}
+`
+
+try{
+
+const r=await fetch("https://api.entur.io/journey-planner/v3/graphql",{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"ET-Client-Name":"magnus-buss-skjerm"
+},
+body:JSON.stringify({query})
+})
+
+const data=await r.json()
+const calls=data.data.stopPlace?.estimatedCalls||[]
+
+const filtered=calls.filter(c=>stop.lines.includes(c.serviceJourney.line.publicCode))
+
+const html=filtered.slice(0,6).map(c=>{
+
+const mins=Math.round((new Date(c.expectedDepartureTime)-new Date())/60000)
+
+return `
+<div class="departure">
+<div>${c.serviceJourney.line.publicCode} ${c.destinationDisplay.frontText}</div>
+<div class="time">${mins>0?mins+" min":"nå"}</div>
+</div>`
+
+}).join("")
+
+document.getElementById(stop.el).innerHTML=html||'<div class="departure">Ingen avganger</div>'
+
+}catch(e){
+document.getElementById(stop.el).innerHTML='<div class="departure">Feil ved henting</div>'
+}
+
+}
+
+updated.textContent="Oppdatert "+new Date().toLocaleTimeString("no-NO",{hour:"2-digit",minute:"2-digit"})
+
+}
+
+load()
+setInterval(load,30000)
+
+</script>
+
+</body>
+</html>
