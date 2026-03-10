@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>ATB Avganger</title>
-
 <style>
 body{
 background:#0b1220;
@@ -11,25 +10,20 @@ color:white;
 font-family:Arial;
 padding:40px;
 }
-
-h1{
-margin-bottom:20px;
-}
-
 .grid{
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:20px;
 }
-
-a{
-display:block;
+.card{
 background:#141c28;
 padding:20px;
 border-radius:8px;
-text-decoration:none;
-color:white;
-font-size:20px;
+}
+iframe{
+width:100%;
+height:500px;
+border:none;
 }
 </style>
 </head>
@@ -40,21 +34,25 @@ font-size:20px;
 
 <div class="grid">
 
-<a href="https://entur.no/stoppested/NSR:StopPlace:43013" target="_blank">
-Studentersamfundet 1
-</a>
+<div class="card">
+<h3>Studentersamfundet</h3>
+<iframe src="https://entur.no/stoppested/NSR:StopPlace:43013"></iframe>
+</div>
 
-<a href="https://entur.no/stoppested/NSR:StopPlace:43014" target="_blank">
-Studentersamfundet 2
-</a>
+<div class="card">
+<h3>Studentersamfundet 2</h3>
+<iframe src="https://entur.no/stoppested/NSR:StopPlace:43014"></iframe>
+</div>
 
-<a href="https://entur.no/stoppested/NSR:StopPlace:43015" target="_blank">
-Studentersamfundet 3
-</a>
+<div class="card">
+<h3>Studentersamfundet 3</h3>
+<iframe src="https://entur.no/stoppested/NSR:StopPlace:43015"></iframe>
+</div>
 
-<a href="https://entur.no/stoppested/NSR:StopPlace:42574" target="_blank">
-Olav Kyrres gate
-</a>
+<div class="card">
+<h3>Olav Kyrres gate</h3>
+<iframe src="https://entur.no/stoppested/NSR:StopPlace:42574"></iframe>
+</div>
 
 </div>
 
