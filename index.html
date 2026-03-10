@@ -8,11 +8,26 @@
 body{
 margin:0;
 background:#0b1220;
+font-family:Arial;
+color:white;
+padding:30px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+
+.card{
+background:#141c28;
+padding:15px;
+border-radius:8px;
 }
 
 iframe{
-width:100vw;
-height:100vh;
+width:100%;
+height:500px;
 border:none;
 }
 </style>
@@ -21,7 +36,31 @@ border:none;
 
 <body>
 
-<iframe src="https://avgangstavle.entur.no/?id=NSR:StopPlace:43013"></iframe>
+<h1>ATB Avganger</h1>
+
+<div class="grid">
+
+<div class="card">
+<h3>Studentersamfundet</h3>
+<iframe src="https://entur.no/stoppested/43013"></iframe>
+</div>
+
+<div class="card">
+<h3>Studentersamfundet 2</h3>
+<iframe src="https://entur.no/stoppested/43014"></iframe>
+</div>
+
+<div class="card">
+<h3>Studentersamfundet 3</h3>
+<iframe src="https://entur.no/stoppested/43015"></iframe>
+</div>
+
+<div class="card">
+<h3>Olav Kyrres gate</h3>
+<iframe src="https://entur.no/stoppested/42574"></iframe>
+</div>
+
+</div>
 
 </body>
 </html>
